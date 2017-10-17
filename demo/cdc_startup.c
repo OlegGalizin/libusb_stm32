@@ -32,6 +32,16 @@ static void cdc_init_rcc (void) {
     _BMD(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_PLL);
     _WVL(RCC->CFGR, RCC_CFGR_SWS, RCC_CFGR_SWS_PLL);
 
+#elif defined(STM32F0)
+    _BST(RCC->APB1ENR, RCC_APB1ENR_CRSEN); /* Clock Recovery System interface clock enabled */
+    _BCL(RCC->CFGR3, RCC_CFGR3_USBSW); /*HSI48 clock selected as USB clock source */
+    _BST(RCC->CR2, RCC_CR2_HSI48ON); /* HSI48 oscillator ON */
+    _WBS(RCC->CR2, RCC_CR2_HSI48RDY); /* HSI48 oscillator ready */
+    _BST(FLASH->ACR, FLASH_ACR_PRFTBE | FLASH_ACR_LATENCY); /* Prefetch buffer enable, One wait state */
+    _BMD(CRS->CFGR, CRS_CFGR_SYNCSRC,CRS_CFGR_SYNCSRC_1); /* USB SOF selected as SYNC signal source */
+    _BST(CRS->CR,CRS_CR_AUTOTRIMEN|CRS_CR_CEN); /* Automatic trimming enabled, Frequency error counter enabled */
+    _BST(RCC->CFGR, RCC_CFGR_SW);  /* HSI48 selected as system clock */
+
 #elif defined(STM32L1)
     _BST(RCC->APB1ENR, RCC_APB1ENR_PWREN);
     _BMD(PWR->CR, PWR_CR_VOS, PWR_CR_VOS_0);

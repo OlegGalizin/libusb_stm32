@@ -20,6 +20,12 @@
 
 #if defined(USE_STMV0_DRIVER)
 
+#if defined(STM32F0)
+#define UID_BASE        0x1FFFF7AC
+#else
+#define UID_BASE        0x1FF80050
+#endif
+
 #ifndef USB_PMASIZE
     #warning PMA memory size is not defined. Use 1k by default
     #define USB_PMASIZE 0x400
